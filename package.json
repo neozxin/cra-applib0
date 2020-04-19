@@ -10,6 +10,7 @@
     "@types/node": "^12.12.36",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
+    "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
@@ -17,9 +18,14 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --ci=true --env=jsdom --coverage --watchAll=false --testMatch=**\\/*\\\\.{spec,test}\\\\.{js,jsx,ts,tsx}",
+    "eject": "react-scripts eject",
+    "test:aat": "npm run build && start-server-and-test 'http-server -c-1 -p 8881' 8881 'react-app-rewired test --ci=true --forceExit --watchAll=false --testMatch=**\\/*\\.aa-test\\.{js,jsx,ts,tsx}'",
+    "lib:build": "rimraf ./build/_build-lib && tsc -p ./src/lib-repo/tsconfig.json && copyfiles -u 2 ./src/lib-repo/**/*.*css ./src/lib-repo/assets/*.* ./src/lib-repo/package.json ./src/lib-repo/*.md ./src/lib-repo/cli.js ./build/_build-lib",
+    "lib:publishnpm": "npm run lib:build && npm publish ./build/_build-lib",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -35,5 +41,29 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^5.3.18",
+    "@storybook/addon-links": "^5.3.18",
+    "@storybook/addons": "^5.3.18",
+    "@storybook/cli": "^5.3.17",
+    "@storybook/preset-create-react-app": "^2.1.1",
+    "@storybook/react": "^5.3.18",
+    "copyfiles": "^2.2.0",
+    "dot-json": "^1.2.0",
+    "http-server": "^0.12.1",
+    "husky": "^4.2.3",
+    "jest-image-snapshot": "^3.0.1",
+    "prettier": "^2.0.2",
+    "pretty-quick": "^2.0.1",
+    "puppeteer": "^2.1.1",
+    "react-app-rewired": "^2.1.5",
+    "rimraf": "^3.0.2",
+    "start-server-and-test": "^1.10.11"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }

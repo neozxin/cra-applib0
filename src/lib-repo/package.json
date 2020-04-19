@@ -1,0 +1,9 @@
+{
+  "name": "neozxin--npm-module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./main.js",
+  "bin": "./cli.js",
+  "author": "neozxin",
+  "license": "ISC"
+}

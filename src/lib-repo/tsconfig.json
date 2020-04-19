@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "outDir": "../../build/_build-lib",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": ["es2015", "dom"],
+    "sourceMap": true,
+    "declaration": true,
+    "jsx": "react",
+    "rootDirs": ["src", "stories"],
+    "noImplicitAny": false,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true
+  },
+  "files": ["./main.ts"]
+}
