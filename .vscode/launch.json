@@ -33,6 +33,22 @@
         "CI": "true"
       },
       "disableOptimisticBPs": true
+    },
+    // Ref: https://code.visualstudio.com/docs/nodejs/nodejs-debugging
+    {
+      "name": "Debug NodeJS file",
+      "type": "node",
+      "request": "launch",
+      "program": "${file}",
+      "args": ["testarg"],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "CI": "true"
+      },
+      "disableOptimisticBPs": true
     }
   ]
 }
