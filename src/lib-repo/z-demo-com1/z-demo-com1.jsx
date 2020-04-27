@@ -3,6 +3,12 @@ import React from 'react';
 
 // utils
 const componentUtils = {
+  toPascalCase(text) {
+    function clearAndUpper(text) {
+      return text.replace(/-/, '').toUpperCase();
+    }
+    return text.replace(/(^\w|-\w)/g, clearAndUpper);
+  },
   getFinalProps: ({ defaultPropCreators = {}, props = {} } = {}) => {
     return {
       ...Object.entries(defaultPropCreators)
@@ -17,31 +23,27 @@ const componentUtils = {
       ...props,
     };
   },
-  createFunctionComponent: (defaultPropCreators = {}, optMap = {}) => (
-    props = {}
-  ) => {
-    const finalProps = componentUtils.getFinalProps({
-      defaultPropCreators,
-      props,
-    });
-    const getUtils = () => {
-      const { typeid = `defaultType`, className = `` } = finalProps;
-      const elProps = {
-        className: `${optMap.className || '--base-com'} ${className}`,
-        'data-typeid': typeid,
+  createFunctionComponent: (optMap = {}, defaultPropCreators = {}) => {
+    const optMapClassName =
+      typeof optMap === 'string' ? optMap : optMap.className;
+    function fn(props = {}) {
+      const finalProps = componentUtils.getFinalProps({
+        defaultPropCreators,
+        props,
+      });
+      const getUtils = () => {
+        const { typeid = `defaultType`, className = `` } = finalProps;
+        const elProps = {
+          className: `${optMapClassName || '--base-com'} ${className}`,
+          'data-typeid': typeid,
+        };
+        return { elProps, typeid };
       };
-      return { elProps, typeid };
-    };
-    return finalProps.render(finalProps, getUtils);
-  },
-};
-
-// configs
-const demoConfigs = {
-  getZDemoCom1Config: () => {
-    return {
-      displayName: 'non default display name',
-    };
+      return finalProps.render(finalProps, getUtils);
+    }
+    return Object.assign(fn, {
+      __comName: componentUtils.toPascalCase(optMapClassName),
+    });
   },
 };
 
