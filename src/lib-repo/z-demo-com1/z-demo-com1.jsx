@@ -3,7 +3,7 @@ import React from 'react';
 
 // utils
 const componentUtils = {
-  getFinalProps: ({ props, defaultPropCreators }) => {
+  getFinalProps: ({ defaultPropCreators = {}, props = {} } = {}) => {
     return {
       ...Object.entries(defaultPropCreators)
         .filter((entry) => typeof props[entry[0]] === 'undefined')
@@ -14,17 +14,25 @@ const componentUtils = {
           }),
           {}
         ),
-      ...Object.entries(props)
-        .filter((entry) => typeof props[entry[0]] !== 'undefined')
-        .reduce((props, entry) => ({ ...props, [entry[0]]: entry[1] }), {}),
+      ...props,
     };
   },
-  createFunctionComponent: (defaultPropCreators) => (props) => {
+  createFunctionComponent: (defaultPropCreators = {}, optMap = {}) => (
+    props = {}
+  ) => {
     const finalProps = componentUtils.getFinalProps({
-      props,
       defaultPropCreators,
+      props,
     });
-    return finalProps.render(finalProps);
+    const getUtils = () => {
+      const { typeid = `defaultType`, className = `` } = finalProps;
+      const elProps = {
+        className: `${optMap.className || '--base-com'} ${className}`,
+        'data-typeid': typeid,
+      };
+      return { elProps, typeid };
+    };
+    return finalProps.render(finalProps, getUtils);
   },
 };
 
